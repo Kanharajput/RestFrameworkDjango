@@ -12,7 +12,8 @@ class Students(models.Model):
 
     name = models.CharField(max_length=100)
     section = models.CharField(max_length=20)
-    phone_no = models.IntegerField(max_length=10)
+    # integer field don't have max_length
+    phone_no = models.IntegerField()
 
     def __str__(self):
         return self.name
