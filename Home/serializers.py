@@ -25,5 +25,14 @@ class StudentSerializer(serializers.ModelSerializer):
         if phone_no_length != 10:
             # this will stop the flow of program and not let the user save data to database
             raise serializers.ValidationError({'error','enter a valid 10 digit phone no.'})
-        # if there's no error simply return the attrs
-        return attrs
+        
+        else:
+            if attrs["name"].isalpha():
+                # if there's no error simply return the attrs
+                return attrs
+
+            raise serializers.ValidationError({'error','Name should only contain the aplhabets'})
+
+        
+    
+    
