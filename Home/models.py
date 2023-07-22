@@ -1,5 +1,4 @@
 from django.db import models
-
 '''
 we are using the sqlite3 database which is already connected with this projects
 check settings
@@ -17,3 +16,4 @@ class Students(models.Model):
 
     def __str__(self):
         return self.name
+    

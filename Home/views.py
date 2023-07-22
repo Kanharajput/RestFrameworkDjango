@@ -16,6 +16,13 @@ def provideFromDB(request):
 
 @api_view(['POST'])
 def saveToDB(request):  
-    data = request.data
-    print(data)
-    return Response({'status':200,'payload':data})
+    data = request.data                # to print the data in payload in Response
+    serializer_data = StudentSerializer(data=request.data)        # kwargs parameter
+    if not serializer_data.is_valid():
+        return Response({'status':403, 'error':serializer_data.errors})
+    
+    else:
+        serializer_data.save()  
+        # 200-299 define succussful responses
+        # 200 define ok and 201 define created
+        return Response({'status':201,'payload':data, 'message':'data saved'})
