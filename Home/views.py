@@ -9,8 +9,13 @@ from .models import Students
 # using @api_view decorator now it won't remain the same view method
 # GET describe here that it only accept the GET request from GET,POST,PUT,PATCH and DELETE
 @api_view(['GET'])
-def home(request):
-    students = Students.objects.get(id=1)   
-    serializer_data = StudentSerializer(students)
+def provideFromDB(request):
+    students = Students.objects.all()   
+    serializer_data = StudentSerializer(students, many=True)           # set many=True if more than one enteries in students
     return Response({'status': 200,'payload': serializer_data.data})
 
+@api_view(['POST'])
+def saveToDB(request):  
+    data = request.data
+    print(data)
+    return Response({'status':200,'payload':data})
