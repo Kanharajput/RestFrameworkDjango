@@ -56,12 +56,14 @@ def updateDB(request, id):
     
 
 @api_view(['DELETE'])
-def deleteData(request,id):
+def deleteData(request):
     try:
+        # if url is delete-db/?id=23 then we have to get the id like this
+        id = request.GET.get('id')
         student = Students.objects.get(id=id)
         student.delete()
         return Response({'status': 200, 'payload': 'student data deleted succesfully'})
-
+ 
     except Exception as e:
         print(e)
         return Response({'status': 400, 'error': 'may be wrong id'})
