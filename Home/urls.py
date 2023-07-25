@@ -5,4 +5,5 @@ urlpatterns = [
     path('',views.provideFromDB),
     path('upload-data/',views.saveToDB),
     path('update-db/<id>/',views.updateDB),
+    path('delete-db/<id>/',views.deleteData),
 ]

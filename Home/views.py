@@ -53,3 +53,16 @@ def updateDB(request, id):
     except Exception as e:
         print(e)
         return Response({'status' : 403,'error' : 'invalid id'})
+    
+
+@api_view(['DELETE'])
+def deleteData(request,id):
+    try:
+        student = Students.objects.get(id=id)
+        student.delete()
+        return Response({'status': 200, 'payload': 'student data deleted succesfully'})
+
+    except Exception as e:
+        print(e)
+        return Response({'status': 400, 'error': 'may be wrong id'})
+    
