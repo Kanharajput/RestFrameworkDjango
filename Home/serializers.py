@@ -21,17 +21,20 @@ class StudentSerializer(serializers.ModelSerializer):
     And this attrs is a dictionary of data passed by user 
     """
     def validate(self, attrs):
-        phone_no_length = len(str(attrs["phone_no"]))
-        if phone_no_length != 10:
-            # this will stop the flow of program and not let the user save data to database
-            raise serializers.ValidationError({'error','enter a valid 10 digit phone no.'})
-        
-        else:
-            if attrs["name"].isalpha():
-                # if there's no error simply return the attrs
-                return attrs
+        if 'phone_no' in attrs:
+            phone_no_length = len(str(attrs["phone_no"]))
+            if phone_no_length != 10:
+                # this will stop the flow of program and not let the user save data to database
+                raise serializers.ValidationError({'error','enter a valid 10 digit phone no.'})
+            
+        if 'name' in attrs:
+            for i in attrs['name']:
+                if i.isdigit():
+                    # if there's no error simply return the attrs
+                    raise serializers.ValidationError({'error','Name should only contain the aplhabets'})
+            
+        return attrs
 
-            raise serializers.ValidationError({'error','Name should only contain the aplhabets'})
 
         
     

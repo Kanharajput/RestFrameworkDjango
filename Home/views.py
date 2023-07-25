@@ -27,11 +27,15 @@ def saveToDB(request):
         # 200 define ok and 201 define created
         return Response({'status':201,'payload':data, 'message':'data saved'})
     
-
 '''
 PUT
 so if we want to update the data using put then we have to write the values for the fields also which we are not going to update
 otherwise it won't work. But we can left the fields which are default and auto incrementing like id.
+'''
+'''
+PATCH
+patch is better than put if we have to update only selected fields. To enable patch just add partial=True 
+in serializer class constructor. no need to change the decorator.
 '''
 @api_view(['PUT'])
 def updateDB(request, id):
@@ -39,8 +43,7 @@ def updateDB(request, id):
         # fetching the student data with id
         student = Students.objects.get(id=id)
         # passing student here again to update data so that it won't create a new row
-        serializer_data = StudentSerializer(student, data=request.data)
-
+        serializer_data = StudentSerializer(student, data=request.data, partial=True)
         if not serializer_data.is_valid():
             return Response({'status':403 ,'errors': serializer_data.errors})
         
@@ -48,7 +51,5 @@ def updateDB(request, id):
         return Response({'status':200, 'payload': serializer_data.data,'message': 'student data is updated'})
 
     except Exception as e:
-        raise Response({
-            'status' : 403,
-            'error' : e            
-        })
+        print(e)
+        return Response({'status' : 403,'error' : 'invalid id'})
