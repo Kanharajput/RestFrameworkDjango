@@ -3,6 +3,6 @@ from . import views
 
 urlpatterns = [
     path('',views.nestedSerializer),
-    path('/getbooks/',views.getBooks),
-    path('/getcategory/',views.getCategory),
+    path('getbooks/',views.getBooks),
+    path('getcategory/',views.getCategory),
 ]
