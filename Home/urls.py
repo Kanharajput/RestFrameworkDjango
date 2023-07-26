@@ -1,9 +1,7 @@
 from django.urls import path
-from . import views
+from .views import StudentApi
 
 urlpatterns = [
-    path('',views.provideFromDB),
-    path('upload-data/',views.saveToDB),
-    path('update-db/<id>/',views.updateDB),
-    path('delete-db/',views.deleteData),
+    # it will handle all the requests
+    path('',StudentApi.as_view()),
 ]
