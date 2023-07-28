@@ -10,6 +10,13 @@ class UserSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+    # save the password in hash format
+    def create(self, validated_data):
+        user = User.objects.create(username = validated_data['username'])
+        user.set_password(validated_data['password'])   # without this admin panel show password formate invalid 
+        user.save()
+        return user
+
 
 class StudentSerializer(serializers.ModelSerializer):
     class Meta:
