@@ -14,10 +14,12 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from rest_framework.authtoken import views
 from django.urls import path,include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('Home.urls')),
-    path('nested-serializer/',include('AnotherApp.urls'))
+    path('nested-serializer/',include('AnotherApp.urls')),
+    path('api-auth-token/',views.obtain_auth_token),            # expose this url so that user can create their token
 ]

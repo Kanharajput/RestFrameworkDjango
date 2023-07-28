@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'Home',
     'AnotherApp',
+    'rest_framework.authtoken',                  # it will create token table inside db
 ]
 
 MIDDLEWARE = [
