@@ -7,7 +7,9 @@ from .serializers import StudentSerializer, UserSerializer
 from .models import Students
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
-
+# imports to make StudentApi Token Authorization
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 @api_view(['POST'])
 def generateToken(request):
@@ -24,7 +26,14 @@ def generateToken(request):
 # Class based View
 # using just one url we can handle all the request
 class StudentApi(APIView):
+    # this will define, we are going to authenticate via token 
+    # and let the user only access this class methods when he is authenticated
+    # user has to pass the token in header like this- Authorization: token 79c03a012fc776a7553568a523944064fe2bb510
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
+        print(request.user)    # print the user who is accessing this data
         students =  Students.objects.all()
         serialized_students = StudentSerializer(students, many=True)
         return Response({'status': 200,'payload': serialized_students.data})  
