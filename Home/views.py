@@ -3,12 +3,26 @@ from django.http import HttpResponse
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import StudentSerializer
+from .serializers import StudentSerializer, UserSerializer
 from .models import Students
+from rest_framework.authtoken.models import Token
+from django.contrib.auth.models import User
+
+
+@api_view(['POST'])
+def generateToken(request):
+    user_serialized = UserSerializer(data = request.data)
+    if not user_serialized.is_valid():
+        return Response({'status' : 400, 'message': 'please enter a valid user data','errors': user_serialized.errors})
+    
+    user_serialized.save()
+    user = User.objects.get(username=user_serialized.data['username'])
+    token, _ = Token.objects.get_or_create(user=user)
+    return Response({'status': 200, 'payload': 'token created', 'token': str(token)})
+  
 
 # Class based View
 # using just one url we can handle all the request
-
 class StudentApi(APIView):
     def get(self, request):
         students =  Students.objects.all()
