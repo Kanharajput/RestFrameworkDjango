@@ -16,10 +16,17 @@ Including another URLconf
 from django.contrib import admin
 from rest_framework.authtoken import views
 from django.urls import path,include
+from rest_framework_simplejwt.views import (    
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('Home.urls')),
     path('nested-serializer/',include('AnotherApp.urls')),
     path('api-auth-token/',views.obtain_auth_token),            # expose this url so that user can create their token
+    # links where a registered user can generate jwt token
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]

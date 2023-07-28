@@ -10,6 +10,18 @@ from django.contrib.auth.models import User
 # imports to make StudentApi Token Authorization
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+# to generate jwt token for a new user
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.authentication import JWTAuthentication
+
+# generate jwt tokens
+def get_tokens_for_user(user):
+    refresh = RefreshToken.for_user(user)
+
+    return {
+        'refresh': str(refresh),
+        'access': str(refresh.access_token),
+    }
 
 @api_view(['POST'])
 def generateToken(request):
@@ -19,17 +31,20 @@ def generateToken(request):
     
     user_serialized.save()
     user = User.objects.get(username=user_serialized.data['username'])
-    token, _ = Token.objects.get_or_create(user=user)
-    return Response({'status': 200, 'payload': 'token created', 'token': str(token)})
+    tokens = get_tokens_for_user(user)
+    return Response({'status': 200, 
+                     'payload': 'token created', 
+                     'refresh': str(tokens['refresh']),
+                     'access':str(tokens['access'])
+                    })
   
 
 # Class based View
 # using just one url we can handle all the request
 class StudentApi(APIView):
-    # this will define, we are going to authenticate via token 
-    # and let the user only access this class methods when he is authenticated
-    # user has to pass the token in header like this- Authorization: token 79c03a012fc776a7553568a523944064fe2bb510
-    authentication_classes = [TokenAuthentication]
+    # authenticate via jwt token
+    # user has to pass the access token in the bearer
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get(self, request):

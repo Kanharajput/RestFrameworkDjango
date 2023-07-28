@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -130,4 +131,12 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
+}
+
+# settings for jwt tokens
+SIMPLE_JWT = {
+    # after 1 minute this token will expire
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=1),   # it is to access the API
+    # go to url api/token/refresh and pass refresh token in json format.
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),     # it is only used to regenerate the access token
 }
