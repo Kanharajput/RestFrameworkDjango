@@ -13,6 +13,8 @@ from rest_framework.permissions import IsAuthenticated
 # to generate jwt token for a new user
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.authentication import JWTAuthentication
+# to get generic views
+from rest_framework import generics
 
 # generate jwt tokens
 def get_tokens_for_user(user):
@@ -37,8 +39,21 @@ def generateToken(request):
                      'refresh': str(tokens['refresh']),
                      'access':str(tokens['access'])
                     })
-  
 
+# Generic views makes code more short
+# https://www.django-rest-framework.org/api-guide/generic-views/  
+class StudentGetPost(generics.ListCreateAPIView):
+    queryset = Students.objects.all()
+    serializer_class = StudentSerializer
+
+# here UpdateAPIView handle put and patch request and DestroyAPIView handles delete request
+class StudentUpdateDelete(generics.UpdateAPIView,generics.DestroyAPIView):
+    queryset = Students.objects.all()
+    serializer_class = StudentSerializer
+    lookup_field = 'id'          
+
+
+'''
 # Class based View
 # using just one url we can handle all the request
 class StudentApi(APIView):
@@ -105,7 +120,7 @@ class StudentApi(APIView):
         except Exception as e:
             print(e)
             return Response({'status': 400, 'error': 'may be wrong id'})
-
+'''
 
 '''
 # now this will only accept the get request
