@@ -16,6 +16,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 # to get generic views
 from rest_framework import generics
 
+
 # generate jwt tokens
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
@@ -184,3 +185,4 @@ def deleteData(request):
         print(e)
         return Response({'status': 400, 'error': 'may be wrong id'})
 '''
+

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'Home',
     'AnotherApp',
     'rest_framework.authtoken',                  # it will create token table inside db
+    'GeneratePdf',
 ]
 
 MIDDLEWARE = [
@@ -140,3 +141,6 @@ SIMPLE_JWT = {
     # go to url api/token/refresh and pass refresh token in json format.
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),     # it is only used to regenerate the access token
 }
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR/'Media'
