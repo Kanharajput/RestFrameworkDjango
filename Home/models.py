@@ -18,3 +18,5 @@ class Students(models.Model):
         return self.name
     
 
+class UploadExcel(models.Model):
+    file = models.FileField(upload_to='UplaodedExcel')

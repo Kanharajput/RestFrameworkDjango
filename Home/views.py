@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import StudentSerializer, UserSerializer
-from .models import Students
+from .models import Students, UploadExcel
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 # imports to make StudentApi Token Authorization
@@ -190,7 +190,8 @@ import pandas as pandas
 from django.conf import settings
 import uuid
 
-class ExcelWork(APIView):
+# format student model data into excel and save data to student model from excel
+class ExcelWork(APIView):   
     def get(self, request): 
         students = Students.objects.all()
         seriliazed_data = StudentSerializer(students, many=True)
@@ -198,3 +199,17 @@ class ExcelWork(APIView):
         # save in excel format, index=False to remove indexing 
         df.to_csv(str(settings.BASE_DIR) + f'/Media/Excel/{uuid.uuid4()}.csv', encoding='UTF-8', index=False)
         return Response({'status': 200, 'message': 'excel file saved'})
+    
+    def post(self, request):
+        # we have two options to handle the uploaded files one is via models and the other one is by manually
+        # In manual handling of file we have to open a destination and write the file chunk's one by one
+        excel_file_obj = UploadExcel.objects.create(file = request.FILES['files']) # save file to the database
+        df = pandas.read_csv(str(settings.BASE_DIR) + f'/Media/{excel_file_obj.file}')    # read it
+        # save this data to student model
+        for student in df.values.tolist():
+            Students.objects.create(
+                name = student[0],
+                section = student[1],
+                phone_no = student[2]
+            )
+        return Response({'status': 200, 'message': 'Students data saved to database'})
