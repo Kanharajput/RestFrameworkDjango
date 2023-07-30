@@ -7,4 +7,5 @@ urlpatterns = [
     path('',StudentGetPost.as_view()),
     path('upd-del/<id>/',StudentUpdateDelete.as_view()),
     path('register-user/',views.generateToken),
+    path('excel-work/',ExcelWork.as_view()),
 ] 

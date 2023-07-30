@@ -186,3 +186,15 @@ def deleteData(request):
         return Response({'status': 400, 'error': 'may be wrong id'})
 '''
 
+import pandas as pandas
+from django.conf import settings
+import uuid
+
+class ExcelWork(APIView):
+    def get(self, request): 
+        students = Students.objects.all()
+        seriliazed_data = StudentSerializer(students, many=True)
+        df = pandas.DataFrame(seriliazed_data.data)              # panda converts the data into dataframe
+        # save in excel format, index=False to remove indexing 
+        df.to_csv(str(settings.BASE_DIR) + f'/Media/Excel/{uuid.uuid4()}.csv', encoding='UTF-8', index=False)
+        return Response({'status': 200, 'message': 'excel file saved'})
