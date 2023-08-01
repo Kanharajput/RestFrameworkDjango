@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'AnotherApp',
     'rest_framework.authtoken',                  # it will create token table inside db
     'GeneratePdf',
+    'OtpApp'
 ]
 
 MIDDLEWARE = [
@@ -144,3 +145,6 @@ SIMPLE_JWT = {
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR/'Media'
+
+# make django aware of custom user
+AUTH_USER_MODEL = 'OtpApp.User'
