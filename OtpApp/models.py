@@ -1,9 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from .manager import UserManager
-# Create your models here.
+from django.db.models.signals import post_save
+from django.dispatch import receiver 
+from django.core.mail import send_mail
+import uuid
+from django.conf import settings
 
-# we are extending a AbstractUser which means we are happy with the by default fields we only want to remove username and wants
+# we are extending a AbstractUser which means 
+# we are happy with the by default fields 
+# we only want to remove username and wants
 # Create your models here.
 class User(AbstractUser):
     username = None
@@ -24,3 +30,19 @@ class User(AbstractUser):
      
     def __str__(self):
         return self.email
+
+
+# this is called signal, it will automatically 
+# send an email when a user succefully register 
+@receiver(post_save, sender=User)
+def send_email_token(sender, instance, created, **kwargs):
+    if created and not instance.is_superuser: 
+        try: 
+            subject = "Your email needs to be verified"
+            message = f'Hi click on the link to verify https://127.0.0.1:8000/{uuid.uuid4()}/'
+            email_from = settings.EMAIL_HOST_USER
+            recipient_list = [instance.email]
+            send_mail(subject, message, email_from, recipient_list)
+
+        except Exception as e:
+            print(e)

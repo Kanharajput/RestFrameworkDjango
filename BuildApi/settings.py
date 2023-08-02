@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'AnotherApp',
     'rest_framework.authtoken',                  # it will create token table inside db
     'GeneratePdf',
-    'OtpApp'
+    'OtpApp',
 ]
 
 MIDDLEWARE = [
@@ -148,3 +148,12 @@ MEDIA_ROOT = BASE_DIR/'Media'
 
 # make django aware of custom user
 AUTH_USER_MODEL = 'OtpApp.User'
+
+# to send the email
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'kanharajput91@gmail.com'
+EMAIL_HOST_PASSWORD = 'nelvafydapsamtco'
+ 
