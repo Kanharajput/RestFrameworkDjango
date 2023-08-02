@@ -6,6 +6,7 @@ from django.dispatch import receiver
 from django.core.mail import send_mail
 import uuid
 from django.conf import settings
+from .helpers import send_otp_to_mobile
 
 # we are extending a AbstractUser which means 
 # we are happy with the by default fields 
@@ -43,6 +44,8 @@ def send_email_token(sender, instance, created, **kwargs):
             email_from = settings.EMAIL_HOST_USER
             recipient_list = [instance.email]
             send_mail(subject, message, email_from, recipient_list)
+            # send otp on phone to register
+            send_otp_to_mobile(instance)
 
         except Exception as e:
             print(e)
