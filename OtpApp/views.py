@@ -2,6 +2,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializer import UserSerializer
 from .models import User
+from .helpers import send_otp_to_mobile
+from rest_framework.decorators import api_view
 
 # Register user
 class RegisterUser(APIView):
@@ -42,3 +44,21 @@ class RegisterUser(APIView):
         except Exception as e:
             return Response({'status': 404, 'message': 'Something went wrong'})
         
+
+@api_view(['PATCH'])
+def regenerate_otp(request):
+    try:
+        is_user = User.objects.filter(phone = request.data['phone']).exists()
+        if is_user:
+            user = User.objects.get(phone = request.data['phone'])
+            sent_or_not = send_otp_to_mobile(user, request.data['phone'])
+
+            if sent_or_not:
+                return Response({'status': 200, 'message': 'Otp sent'})
+            
+            else: 
+                return Response({'status': 500, 'message': f'try after sometime'})
+
+    except Exception as e:
+        print(e)
+        return Response({'status': 400, 'message': 'something went wrong'})

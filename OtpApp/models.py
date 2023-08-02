@@ -45,7 +45,7 @@ def send_email_token(sender, instance, created, **kwargs):
             recipient_list = [instance.email]
             send_mail(subject, message, email_from, recipient_list)
             # send otp on phone to register
-            send_otp_to_mobile(instance)
+            send_otp_to_mobile(instance,instance.phone)
 
         except Exception as e:
             print(e)
