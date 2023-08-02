@@ -10,14 +10,14 @@ def send_otp_to_mobile(user_obj,phone):
     # if otp already exists, 
     # not exists after timeout
     if cache.get(phone):
-        return False
+        return False, cache.ttl(phone)        # we need redis to use ttl
 
     try: 
         otp_to_sent = randint(1000,9999)
         cache.set(phone,otp_to_sent,timeout=60)    # generate next otp after 60 seconds
         user_obj.otp = otp_to_sent
         user_obj.save()
-        return True
+        return True, 0
     
     except Exception as e:
         print(e)

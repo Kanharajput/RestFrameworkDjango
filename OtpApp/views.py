@@ -51,13 +51,13 @@ def regenerate_otp(request):
         is_user = User.objects.filter(phone = request.data['phone']).exists()
         if is_user:
             user = User.objects.get(phone = request.data['phone'])
-            sent_or_not = send_otp_to_mobile(user, request.data['phone'])
+            sent_or_not, time_to_regenerate = send_otp_to_mobile(user, request.data['phone'])
 
             if sent_or_not:
                 return Response({'status': 200, 'message': 'Otp sent'})
             
             else: 
-                return Response({'status': 500, 'message': f'try after sometime'})
+                return Response({'status': 500, 'message': f'try after {time_to_regenerate}s'})
 
     except Exception as e:
         print(e)
