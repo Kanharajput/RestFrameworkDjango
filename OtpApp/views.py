@@ -27,8 +27,6 @@ class RegisterUser(APIView):
     def patch(self, request):
         try:
             if User.objects.filter(phone=request.data['phone']).exists():
-                print("maja aa gaya")
-                print(request.data['otp'])
                 user = User.objects.get(phone=request.data['phone'])
                 saved_otp = user.otp   # get the otp from the database 
 

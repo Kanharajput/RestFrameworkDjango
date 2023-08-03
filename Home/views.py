@@ -17,7 +17,8 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework import generics
 
 
-# generate jwt tokens
+# generate jwt tokens 
+# jwt tokens are not stored at database. 
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
 
@@ -40,6 +41,7 @@ def generateToken(request):
                      'refresh': str(tokens['refresh']),
                      'access':str(tokens['access'])
                     })
+
 
 # Generic views makes code more short
 # https://www.django-rest-framework.org/api-guide/generic-views/  
